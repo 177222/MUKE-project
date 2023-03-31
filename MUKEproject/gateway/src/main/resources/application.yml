@@ -1,0 +1,23 @@
+server:
+  port: 9001
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:7001/eureka
+    register-with-eureka: true
+    fetch-registry: true
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+spring:
+  application:
+    name: MKgateway
+  cloud:
+    gateway:
+      routes:
+        - id: routes-course
+          uri: lb://MK-Course
+          predicates:
+            - Path=/course/**
+          filters:
+            - StripPrefix=1

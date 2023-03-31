@@ -1,0 +1,23 @@
+server:
+  port: 8008
+spring:
+  application:
+    name: MK-Course
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/MK_course?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC
+    username: root
+    password: asasdd
+  data:
+    redis:
+      host: 192.168.204.141
+      port: 6379
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:7001/eureka
+    register-with-eureka: true
+    fetch-registry: true
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}

@@ -1,0 +1,50 @@
+server:
+  port: 8014
+spring:
+  application:
+    name: edu-order-boot
+  shardingsphere:
+    datasource:
+      names: ds0   #配置库的名字，随意
+      ds0:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driverClassName: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://192.168.204.141:3306/MK_order?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC
+        username: root
+        password: asasdd
+    sharding:
+      tables:
+        user_course_order:   # 指定user_course_order表的数据分布情况，配置数据节点
+          actualDataNodes: ds0.user_course_order_$->{0..6}
+          tableStrategy:
+            inline:   # 指定user_course_order表的分片策略，分片策略包括分片键和分片算法
+              shardingColumn: id
+              algorithmExpression: user_course_order_$->{id % 7}
+          keyGenerator:   # 指定user_course_order表的主键生成策略为SNOWFLAKE
+            type: SNOWFLAKE  #主键生成策略为SNOWFLAKE
+            column: id  #指定主键
+  props:
+    sql:
+      show: true
+  rabbitmq:
+    host: 192.168.204.145
+    port: 5672
+    username: huo
+    password: asasdd
+    virtual-host: MK-order
+    queue: order_queue
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:7001/eureka
+    register-with-eureka: true
+    fetch-registry: true
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+ali:
+  sms: #仅做展示
+    signName: 1
+    templateCode: 2
+    assessKeyId: 3
+    assessKeySecret: 4

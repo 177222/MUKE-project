@@ -1,0 +1,14 @@
+server:
+  port: 8012
+spring:
+  application:
+    name: MK-pay
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:7001/eureka
+    register-with-eureka: true
+    fetch-registry: true
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
